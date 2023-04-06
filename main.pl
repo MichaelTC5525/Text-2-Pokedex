@@ -74,6 +74,7 @@ light(Ind) :-
     W < 20.
 
 noun(["pokemon" | L],L,Ind, [facts:pokemon(Ind)|C],C).
+noun(["Pokemon" | L],L,Ind, [facts:pokemon(Ind)|C],C).
 noun([N | L], L, Ind, C,C) :- name(Ind, N). % Parse fails if there is no entity for name
 
 omp(L0,L1,E,C0,C1) :-
@@ -84,6 +85,10 @@ omp(L,L,_,C,C).
 mp(L0,L2,Subject,C0,C2) :-
     reln_single(L0,L1,Subject,C0,C1).
 mp(["that"|L0],L2,Subject,C0,C2) :-
+    reln_single(L0,L1,Subject,C0,C1).
+mp(["with", "a"|L0],L2,Subject,C0,C2) :-
+    reln_single(L0,L1,Subject,C0,C1).
+mp(["with", "an"|L0],L2,Subject,C0,C2) :-
     reln_single(L0,L1,Subject,C0,C1).
 mp(["with"|L0],L2,Subject,C0,C2) :-
     reln_single(L0,L1,Subject,C0,C1).
@@ -98,30 +103,27 @@ mp(["with"|L0],L2,Subject,C0,C2) :-
 %     reln(L0,L1,Subject,Object,C0,C1),
 %     aphrase(L1,L2,Object,C1,C2).
 
-reln_single(["weight", "greater", "than", Number, "lb" | L],L,Sub,[facts:weightlb(Sub,Val), Val > Number | C ], C).
-reln_single(["weight", "larger", "than", Number, "lb" | L],L,Sub,[weightlb(Sub,Val), Val > Number | C ], C).
-reln_single(["weight", "bigger", "than" , Number , "lb" | L],L,Sub,[weightlb(Sub,Val), Val > Number | C ], C).
-reln_single(["weight", "less", "than" , Number , "lb" | L],L,Sub,[weightlb(Sub,Val), Val < Number | C ], C).
-reln_single(["weight", "smaller", "than", Number, "lb" | L],L,Sub,[weightlb(Sub,Val), Val < Number | C ], C).
+reln_single(["weight", "greater", "than", Number, "lb" | L],L,Sub,[facts:weightlb(Sub,Val), number_codes(Num, Number), Val > Num | C ], C).
+reln_single(["weight", "larger", "than", Number, "lb" | L],L,Sub,[facts:weightlb(Sub,Val), Val > Number | C ], C).
+reln_single(["weight", "bigger", "than" , Number , "lb" | L],L,Sub,[facts:weightlb(Sub,Val), Val > Number | C ], C).
+reln_single(["weight", "less", "than" , Number , "lb" | L],L,Sub,[facts:weightlb(Sub,Val), Val < Number | C ], C).
+reln_single(["weight", "smaller", "than", Number, "lb" | L],L,Sub,[facts:weightlb(Sub,Val), Val < Number | C ], C).
 
-reln_single(["weight", "greater", "than", Number | L],L,Sub,[weightkg(Sub,Val), Val > Number | C ], C).
-reln_single(["weight", "larger", "than", Number | L],L,Sub,[weightkg(Sub,Val), Val > Number | C ], C).
-reln_single(["weight", "bigger", "than", Number | L],L,Sub,[weightkg(Sub,Val), Val > Number | C ], C).
-reln_single(["weight", "less", "than", Number | L],L,Sub,[weightkg(Sub,Val), Val < Number | C ], C).
-reln_single(["weight", "smaller", "than", Number | L],L,Sub,[weightkg(Sub,Val), Val < Number | C ], C).
+reln_single(["weight", "greater", "than", Number | L],L,Sub,[facts:weightkg(Sub,Val), number_codes(Num, Number), Val > Num | C], C).
+reln_single(["weight", "larger", "than", Number | L],L,Sub,[facts:weightkg(Sub,Val), Val > Number | C ], C).
+reln_single(["weight", "bigger", "than", Number | L],L,Sub,[facts:weightkg(Sub,Val), Val > Number | C ], C).
+reln_single(["weight", "less", "than", Number | L],L,Sub,[facts:weightkg(Sub,Val), Val < Number | C ], C).
+reln_single(["weight", "smaller", "than", Number | L],L,Sub,[facts:weightkg(Sub,Val), Val < Number | C ], C).
 
-reln_single(["height", "greater", "than",  Number | L],L,Sub,[height_m(Sub,Val), Val > Number | C ], C).
-reln_single(["height", "larger", "than" , Number | L],L,Sub,[height_m(Sub,Val), Val > Number | C ], C).
-reln_single(["height", "bigger", "than" , Number | L],L,Sub,[height_m(Sub,Val), Val > Number | C ], C).
-reln_single(["height", "less", "than" , Number | L],L,Sub,[height_m(Sub,Val), Val < Number | C ], C).
-reln_single(["height", "smaller", "than" , Number | L],L,Sub,[height_m(Sub,Val), Val < Number | C ], C).
+reln_single(["height", "greater", "than",  Number | L],L,Sub,[facts:height_m(Sub,Val), Val > Number | C ], C).
+reln_single(["height", "larger", "than" , Number | L],L,Sub,[facts:height_m(Sub,Val), Val > Number | C ], C).
+reln_single(["height", "bigger", "than" , Number | L],L,Sub,[facts:height_m(Sub,Val), Val > Number | C ], C).
+reln_single(["height", "less", "than" , Number | L],L,Sub,[facts:height_m(Sub,Val), Val < Number | C ], C).
+reln_single(["height", "smaller", "than" , Number | L],L,Sub,[facts:height_m(Sub,Val), Val < Number | C ], C).
 
 
 % reln(["bordering" | L],L,Sub,Obj,[borders(Sub,Obj)|C],C).
 % reln(["next", "to" | L],L,Sub,Obj, [borders(Sub,Obj)|C],C).
 % reln(["the", "capital", "of" | L],L,Sub,Obj, [capital(Obj,Sub)|C],C).
 % reln(["the", "name", "of" | L],L,Sub,Obj, [name(Obj,Sub)|C],C).
-
-% comparator(["greater", "than" | L], L, Ind, C, C).
-% comparator([Number | L], L, Ind, [weightlb(Ind, Val), Val > Number | C], C).
 
