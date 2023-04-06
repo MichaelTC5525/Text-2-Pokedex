@@ -5,7 +5,7 @@ A Prolog Project for CPSC312-2022W-T2 at UBC
 
 Similar to what was shown in lecture, our group decided to develop a natural language processing system that can answer queries formulated in normal English, within the realm of Pokemon characteristics and attributes. With logic programming, the idea of evaluating facts and hosting a knowledge base seems to be a suitable purpose for a language like Prolog.
 
-See the (UBC Wiki)[https://wiki.ubc.ca/Course:CPSC312-2023/Pokedex] for more information on this idea.
+See the [UBC Wiki](https://wiki.ubc.ca/Course:CPSC312-2023/Pokedex) for more information on this idea.
 
 ## Goals
 
@@ -28,5 +28,5 @@ Our project takes inspiration and reference from provided lecture material, whic
 
 - Lecture .pl files located in the `reference/` directory.
 
-Information on Pokemon is sourced from online resources; we generally consult (Bulbapedia)[https://bulbapedia.bulbagarden.net/] and (PokemonDB)[https://pokemondb.net/].
+Information on Pokemon is sourced from online resources; we generally consult [Bulbapedia](https://bulbapedia.bulbagarden.net/) and [PokemonDB](https://pokemondb.net/).
 
