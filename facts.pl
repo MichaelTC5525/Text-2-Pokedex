@@ -10,10 +10,6 @@ pokemon(electabuzz).
 pokemon(squirtle).
 pokemon(treecko).
 
-
-% pokemon_list(["Pikachu", "Sandslash", "Phanpy", "Groudon", "Entei", "Charizard", "Electabuzz", "Squirtle", "Treecko"]).
-
-
 % Names of Pokemon in KB
 
 name(pikachu, "Pikachu").
@@ -39,7 +35,6 @@ type(electabuzz, electric).
 type(squirtle, water).
 type(treecko, grass).
 
-
 % Weight of Pokemon in pounds
 
 weightlb(pikachu, 13.2).
@@ -52,7 +47,6 @@ weightlb(electabuzz, 66.1).
 weightlb(squirtle, 19.8).
 weightlb(treecko, 11.0).
 
-
 % Weight of Pokemon in kg
 
 weightkg(pikachu, 6.0).
@@ -64,7 +58,6 @@ weightkg(charizard, 90.5).
 weightkg(electabuzz, 30.0).
 weightkg(squirtle, 9.0).
 weightkg(treecko, 5.0).
-
 
 % Height of Pokemon in meters
 
