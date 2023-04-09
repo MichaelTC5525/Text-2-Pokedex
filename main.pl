@@ -24,15 +24,12 @@ find_pokemon(Q, A) :- parse_question(Q, A, C), test_individual(C).
 test_individual([]).
 test_individual([H|T]) :- call(H), test_individual(T).
 
-% get_constraints_from_question(Q,A,C) is true if C is the constraints on A to infer question Q
+% parse_question(Q, A, C) is true if question Q contains constraints C on returned answer A
 parse_question(Q, A, C) :-
     get_question(Q, End, A, C, []),
     member(End, [[], ["?"], ["."]]).
 
 % get_question(Question,QR,Ind) is true if Query provides an answer about Ind to Question
-% get_question(["Is" | L0],L2,Ind,C0,C2) :-
-%     noun_phrase(L0,L1,Ind,C0,C1),
-%     mp(L1,L2,Ind,C1,C2).
 get_question(["What","is" | L0], L1, Ind, C0, C1) :-
     aphrase(L0, L1, Ind, C0, C1).
 get_question(["What" | L0], L2, Ind, C0, C2) :-
@@ -84,8 +81,9 @@ omp(L, L, _, C, C).
 
 mp(L0, L1, Subject, C0, C1) :-
     reln_single(L0, L1, Subject, C0, C1).
-mp(["that" | L0], L1, Subject, C0, C1) :-
-    reln_single(L0, L1, Subject, C0, C1).
+mp(["that" | L0], L2, Subject, C0, C1) :-
+    conj(L0, L1),
+    reln_single(L1, L2, Subject, C0, C1).
 mp(["with", "a" | L0], L1, Subject, C0, C1) :-
     reln_single(L0, L1, Subject, C0, C1).
 mp(["with", "an" | L0], L1, Subject, C0, C1) :-
@@ -93,38 +91,54 @@ mp(["with", "an" | L0], L1, Subject, C0, C1) :-
 mp(["with" | L0], L1, Subject, C0, C1) :-
     reln_single(L0, L1, Subject, C0, C1).
 
+mp(L0, L2, Subject, C0, C2) :-
+    reln(L0, L1, Subject, Object, C0, C1),
+    aphrase(L1, L2, Object, C1, C2).
+mp(["that" | L0], L3, Subject, C0, C2) :-
+    conj(L0, L1),
+    reln(L1, L2, Subject, Object, C0, C1),
+    aphrase(L2, L3, Object, C1, C2).
 
-% mp(L0,L2,Subject,C0,C2) :-
-%     reln(L0,L1,Subject,Object,C0,C1),
-%     aphrase(L1,L2,Object,C1,C2).
-% mp(["that"|L0],L2,Subject,C0,C2) :-
-%     reln(L0,L1,Subject,Object,C0,C1),
-%     aphrase(L1,L2,Object,C1,C2).
-% mp(["with"|L0],L2,Subject,C0,C2) :-
-%     reln(L0,L1,Subject,Object,C0,C1),
-%     aphrase(L1,L2,Object,C1,C2).
+conj(["has", "a" | L], L).
+conj(["has" | L], L).
+conj(["will", "be" | L], L).
+conj(["is" | L], L).
 
 reln_single(["weight", "greater", "than", Number, "lb" | L], L, Sub, [facts:weightlb(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
 reln_single(["weight", "larger", "than", Number, "lb" | L], L, Sub, [facts:weightlb(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
 reln_single(["weight", "bigger", "than" , Number , "lb" | L], L, Sub, [facts:weightlb(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
+reln_single(["heavier", "than" , Number , "lb" | L], L, Sub, [facts:weightlb(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
 reln_single(["weight", "less", "than" , Number , "lb" | L], L, Sub, [facts:weightlb(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
 reln_single(["weight", "smaller", "than", Number, "lb" | L], L, Sub, [facts:weightlb(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
+reln_single(["lighter", "than" , Number , "lb" | L], L, Sub, [facts:weightlb(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
 
-reln_single(["weight", "greater", "than", Number | L], L, Sub, [facts:weightkg(Sub,Val), number_codes(Num, Number), Val > Num | C], C).
-reln_single(["weight", "larger", "than", Number | L], L, Sub, [facts:weightkg(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
-reln_single(["weight", "bigger", "than", Number | L], L, Sub, [facts:weightkg(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
-reln_single(["weight", "less", "than", Number | L], L, Sub, [facts:weightkg(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
-reln_single(["weight", "smaller", "than", Number | L], L, Sub, [facts:weightkg(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
+reln_single(["weight", "greater", "than", Number, "kg" | L], L, Sub, [facts:weightkg(Sub,Val), number_codes(Num, Number), Val > Num | C], C).
+reln_single(["weight", "larger", "than", Number, "kg"| L], L, Sub, [facts:weightkg(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
+reln_single(["weight", "bigger", "than", Number, "kg" | L], L, Sub, [facts:weightkg(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
+reln_single(["heavier", "than" , Number, "kg" | L], L, Sub, [facts:weightkg(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
+reln_single(["weight", "less", "than", Number, "kg" | L], L, Sub, [facts:weightkg(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
+reln_single(["weight", "smaller", "than", Number, "kg" | L], L, Sub, [facts:weightkg(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
+reln_single(["lighter", "than", Number, "kg" | L], L, Sub, [facts:weightkg(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
 
-reln_single(["height", "greater", "than",  Number | L], L, Sub, [facts:height_m(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
-reln_single(["height", "larger", "than" , Number | L], L, Sub, [facts:height_m(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
-reln_single(["height", "bigger", "than" , Number | L], L, Sub, [facts:height_m(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
-reln_single(["height", "less", "than" , Number | L], L, Sub, [facts:height_m(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
-reln_single(["height", "smaller", "than" , Number | L], L, Sub, [facts:height_m(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
+reln_single(["height", "greater", "than",  Number, "m" | L], L, Sub, [facts:height_m(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
+reln_single(["height", "larger", "than" , Number, "m" | L], L, Sub, [facts:height_m(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
+reln_single(["height", "bigger", "than" , Number, "m" | L], L, Sub, [facts:height_m(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
+reln_single(["taller", "than" , Number, "m" | L], L, Sub, [facts:height_m(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
+reln_single(["height", "less", "than" , Number, "m" | L], L, Sub, [facts:height_m(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
+reln_single(["height", "smaller", "than" , Number, "m" | L], L, Sub, [facts:height_m(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
+reln_single(["shorter", "than" , Number, "m" | L], L, Sub, [facts:height_m(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
 
+reln_single(["national", "number", "greater", "than",  Number | L], L, Sub, [facts:national_num(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
+reln_single(["national", "number", "larger", "than",  Number | L], L, Sub, [facts:national_num(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
+reln_single(["national", "number", "bigger", "than",  Number | L], L, Sub, [facts:national_num(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
+reln_single(["national", "number", "less", "than" , Number | L], L, Sub, [facts:national_num(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
+reln_single(["national", "number", "smaller", "than" , Number | L], L, Sub, [facts:national_num(Sub, Val), number_codes(Num, Number), Val < Num | C ], C).
 
-% reln(["bordering" | L],L,Sub,Obj,[borders(Sub,Obj)|C],C).
-% reln(["next", "to" | L],L,Sub,Obj, [borders(Sub,Obj)|C],C).
-% reln(["the", "capital", "of" | L],L,Sub,Obj, [capital(Obj,Sub)|C],C).
-% reln(["the", "name", "of" | L],L,Sub,Obj, [name(Obj,Sub)|C],C).
+reln(["strong", "against" | L], L, Sub, Obj, [strong_against(Sub, Obj) | C], C).
+reln(["good", "against" | L], L, Sub, Obj, [strong_against(Sub, Obj) | C], C).
 
+reln(["weak", "against" | L], L, Sub, Obj, [weak_against(Sub, Obj) | C], C).
+reln(["bad", "against" | L], L, Sub, Obj, [weak_against(Sub, Obj) | C], C).
+
+strong_against(A, B) :- type(A, Type1), type(B, Type2), facts:type_adv(Type1, Type2), dif(Type1, Type2).
+weak_against(A, B) :- type(A, Type1), type(B, Type2), facts:type_adv(Type2, Type1), dif(Type1, Type2).

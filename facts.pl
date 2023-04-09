@@ -34,6 +34,7 @@ type(charizard, flying).
 type(electabuzz, electric).
 type(squirtle, water).
 type(treecko, grass).
+type(pikachu, fire).
 
 % Weight of Pokemon in pounds
 
@@ -92,3 +93,13 @@ typename(grass, "Grass").
 typename(normal, "Normal").
 typename(flying, "Flying").
 typename(ground, "Ground").
+typename(fighting, "Fighting").
+
+type_adv(ground, electric).
+type_adv(electric, water).
+type_adv(water, fire).
+type_adv(fire, grass).
+type_adv(grass, water).
+type_adv(flying, fighting).
+type_adv(fighting, normal).
+type_adv(ground, fire).
