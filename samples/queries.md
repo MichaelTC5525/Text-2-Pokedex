@@ -1,9 +1,5 @@
 # Example Queries
 
-<style>
-    table, th, td {border: 1px solid}
-</style>
-
 Note that this table is meant to show queries that are accepted, however the answers here may not be comprehensive depending on the amount of knowledge currently presented in `facts.pl`.
 
 <table>
