@@ -79,21 +79,17 @@ omp(L0, L1, E, C0, C1) :-
 omp(L, L, _, C, C).
 
 
-mp(L0, L1, Subject, C0, C1) :-
-    reln_single(L0, L1, Subject, C0, C1).
+mp(L0, L2, Subject, C0, C1) :-
+    conj(L0, L1),
+    reln_single(L1, L2, Subject, C0, C1).
 mp(["that" | L0], L2, Subject, C0, C1) :-
     conj(L0, L1),
     reln_single(L1, L2, Subject, C0, C1).
-mp(["with", "a" | L0], L1, Subject, C0, C1) :-
-    reln_single(L0, L1, Subject, C0, C1).
-mp(["with", "an" | L0], L1, Subject, C0, C1) :-
-    reln_single(L0, L1, Subject, C0, C1).
-mp(["with" | L0], L1, Subject, C0, C1) :-
-    reln_single(L0, L1, Subject, C0, C1).
 
-mp(L0, L2, Subject, C0, C2) :-
-    reln(L0, L1, Subject, Object, C0, C1),
-    aphrase(L1, L2, Object, C1, C2).
+mp(L0, L3, Subject, C0, C2) :-
+    conj(L0, L1),
+    reln(L1, L2, Subject, Object, C0, C1),
+    aphrase(L2, L3, Object, C1, C2).
 mp(["that" | L0], L3, Subject, C0, C2) :-
     conj(L0, L1),
     reln(L1, L2, Subject, Object, C0, C1),
@@ -103,6 +99,9 @@ conj(["has", "a" | L], L).
 conj(["has" | L], L).
 conj(["will", "be" | L], L).
 conj(["is" | L], L).
+conj(["with", "a" | L], L).
+conj(["with", "an" | L], L).
+conj(["with" | L], L).
 
 reln_single(["weight", "greater", "than", Number, "lb" | L], L, Sub, [facts:weightlb(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).
 reln_single(["weight", "larger", "than", Number, "lb" | L], L, Sub, [facts:weightlb(Sub, Val), number_codes(Num, Number), Val > Num | C ], C).

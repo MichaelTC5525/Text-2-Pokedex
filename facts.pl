@@ -1,4 +1,4 @@
-:- module(facts, [name/2, type/2, typename/2, weightlb/2, weightkg/2, height_m/2]).
+:- module(facts, [name/2, type/2, typename/2, weightlb/2, weightkg/2, height_m/2, national_num/2]).
 
 pokemon(pikachu).
 pokemon(sandslash).
@@ -34,7 +34,6 @@ type(charizard, flying).
 type(electabuzz, electric).
 type(squirtle, water).
 type(treecko, grass).
-type(pikachu, fire).
 
 % Weight of Pokemon in pounds
 
