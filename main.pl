@@ -6,10 +6,25 @@
 */
 
 :- use_module(facts).
+:- use_module(api).
 :- use_module(library(clpfd)).
 
+% ONLINE Pokedex Workflow
+api(Ans) :- 
+    write("Welcome to the ONLINE Pokedex. Harness the power of the Internet! Give me a Pokemon to check the type of:\n"), flush_output(current_output),
+    read_line_to_string(user_input, Input), string_lower(Input, Lowered_Input),
+    lookup_pokemon(Lowered_Input, Ans).
+api(Ans) :-
+    write("Sorry, no known matching Pokemon were found!\n"),
+    api(Ans).
+
+% lookup_pokemon(Q,A) makes an API call\
+lookup_pokemon(Q, A) :- get_dict4(Q, A).
+
+
+% OFFLINE Pokedex Workflow
 start(Ans) :-
-    write("Welcome to the Pokedex. Ask me a query:\n"), flush_output(current_output),
+    write("Welcome to the OFFLINE Pokedex. Ask me a query:\n"), flush_output(current_output),
     read_line_to_string(user_input, Input),
     split_string(Input, " -", " ,?.!-", Ln), % ignore punctuation
     find_pokemon(Ln, Ans).
