@@ -12,6 +12,8 @@ See the [UBC Wiki](https://wiki.ubc.ca/Course:CPSC312-2023/Pokedex) for more inf
 - To learn more about Prolog and its syntax; develop skills in logic programming and how to build a knowledge base for languages like this
 - Parse a query as a sentence, taking components of the sentence to inform the search for results
 - Provide a system that is easily expandable and can include more additional Pokemon individuals and their properties using a consistent format that makes them readily query-able
+- To learn how to make HTTP REST API calls in Prolog to external databases to enrich our knowledge base.
+- To learn how to properly handle responses and data from external API calls using Prolog.
 
 ## Team / Contributors
 - Justin Jao
@@ -29,4 +31,6 @@ Our project takes inspiration and reference from provided lecture material, whic
 - Lecture .pl files located in the `reference/` directory.
 
 Information on Pokemon is sourced from online resources; we generally consult [Bulbapedia](https://bulbapedia.bulbagarden.net/) and [PokemonDB](https://pokemondb.net/).
+
+External API calls were made to the open-source PokeAPI at https://pokeapi.co/.
 
