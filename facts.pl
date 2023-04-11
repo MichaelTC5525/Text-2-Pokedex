@@ -38,7 +38,7 @@ name(gardevoir, "Gardevoir").
 name(aggron, "Aggron").
 name(nidorina, "Nidorina").
 name(bonsly, "Bonsly").
-name(wurmple, "Bonsly").
+name(wurmple, "Wurmple").
 name(dratini, "Dratini").
 name(corsola, "Corsola").
 name(meowth, "Meowth").
@@ -198,3 +198,8 @@ type_adv(ice, dragon).
 type_adv(ice, flying).
 type_adv(steel, rock).
 type_adv(flying, bug).
+type_adv(steel, ice).
+type_adv(steel, fairy).
+type_adv(rock, fire).
+type_adv(rock, ice).
+type_adv(rock, bug).
