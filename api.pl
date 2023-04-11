@@ -14,10 +14,13 @@ get_dict2(H, Pokemon) :- get_dict1([H|_], Pokemon).
 
 get_dict1(Val, Pokemon) :- api_call(Dict, Pokemon), get_dict(types, Dict, Val).
 
+request_ok(URL) :- http_open(URL, _, [status_code(Code)]), Code > 199, Code < 300.
+
 api_call(Dict, Pokemon) :-
-atomics_to_string(["https://pokeapi.co/api/v2/pokemon/", Pokemon], URL),
-setup_call_cleanup(
-    http_open(URL, In, [request_header('Accept'='application/json')]),
-    json_read_dict(In, Dict),
-    close(In)
-).
+    atomics_to_string(["https://pokeapi.co/api/v2/pokemon/", Pokemon], URL),
+    request_ok(URL),
+    setup_call_cleanup(
+        http_open(URL, In, [request_header('Accept'='application/json')]),
+        json_read_dict(In, Dict),
+        close(In)
+    ).
